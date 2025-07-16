@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Upload a Note - NoteTrade</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      color: #1f2937;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #fff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Container */
+    form {
+      background: #fff;
+      padding: 2.5rem 3rem;
+      border-radius: 16px;
+      box-shadow:
+        0 10px 25px rgba(59, 130, 246, 0.3),
+        0 6px 12px rgba(99, 102, 241, 0.15);
+      max-width: 480px;
+      width: 100%;
+      transition: box-shadow 0.3s ease;
+    }
+    form:hover {
+      box-shadow:
+        0 15px 35px rgba(59, 130, 246, 0.5),
+        0 8px 20px rgba(99, 102, 241, 0.25);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      color: #334155;
+      user-select: none;
+    }
+    input[type="text"],
+    input[type="file"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #1e293b;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 2px;
+      outline-color: transparent;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="file"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+      outline-color: #3b82f6;
+    }
+
+    /* Number input tweaks */
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: white;
+      background: linear-gradient(90deg, #4f46e5 0%, #3b82f6 100%);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.5);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover,
+    button:focus {
+      background: linear-gradient(90deg, #4338ca 0%, #2563eb 100%);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.8);
+      outline: none;
+    }
+
+    /* Link back */
+    p {
+      margin-top: 1rem;
+      text-align: center;
+    }
+    a {
+      color: #93c5fd;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+    a:hover {
+      color: #3b82f6;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <form action="/notes" method="post" enctype="multipart/form-data" novalidate>
+    <h1>Upload a Note</h1>
+
+    <label for="title">Title</label>
+    <input id="title" name="title" type="text" placeholder="Enter note title" required />
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" placeholder="Briefly describe your note (optional)"></textarea>
+
+    <label for="file">File</label>
+    <input id="file" name="file" type="file" accept=".pdf,.doc,.docx,.txt" required />
+
+    <label for="price">Set Price ($)</label>
+    <input id="price" name="price" type="number" min="0" step="0.01" placeholder="0.00" required />
+
+    <button type="submit">Upload Note</button>
+
+    <p><a href="/">← Back to notes list</a></p>
+  </form>
+</body>
+</html>

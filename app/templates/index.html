@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>NoteTrade – Notes</title>
+  <style>
+    /* Reset some default margins/padding */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #232f3e;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      cursor: default;
+    }
+
+    header a.upload-btn {
+      background-color: #febd69;
+      color: #111;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    header a.upload-btn:hover {
+      background-color: #f7a600;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .note-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: box-shadow 0.3s ease;
+    }
+    .note-card:hover {
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .note-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #232f3e;
+    }
+
+    .note-description {
+      flex-grow: 1;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: #555;
+      overflow-wrap: break-word;
+    }
+
+    .note-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .note-id {
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .download-link {
+      background-color: #febd69;
+      color: #111;
+      font-weight: 600;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      white-space: nowrap;
+    }
+    .download-link:hover {
+      background-color: #f7a600;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      header a.upload-btn {
+        margin-top: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>NoteTrade</h1>
+    <a href="/upload" class="upload-btn">➕ Upload a new note</a>
+  </header>
+
+  <main>
+    {% if notes|length == 0 %}
+      <p style="text-align:center; font-size:1.2rem; color:#666;">No notes yet. Be the first to upload!</p>
+    {% else %}
+      <div class="notes-grid">
+        {% for note in notes %}
+          <div class="note-card">
+            <div class="note-title">{{ note.title }}</div>
+            <div class="note-description">{{ note.description or 'No description provided.' }}</div>
+            <div class="note-footer">
+              <div class="note-id">ID: {{ note.id }}</div>
+              <a href="/uploads/{{ note.file_path }}" class="download-link" download>Download</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </main>
+
+</body>
+</html>

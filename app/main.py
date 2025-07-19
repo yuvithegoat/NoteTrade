@@ -67,3 +67,10 @@ async def upload_note(
     session.commit()
 
     return RedirectResponse("/notes", status_code=303)
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})

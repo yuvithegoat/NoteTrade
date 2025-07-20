@@ -75,6 +75,9 @@ def contact(request: Request):
 @app.get("/privacy", response_class=HTMLResponse)
 def contact(request: Request):
     return templates.TemplateResponse("privacy.html", {"request": request})
+@app.get("/terms", response_class=HTMLResponse)
+def contact(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
 # API routes
 @app.get("/api/notes", response_model=List[Note])
 def read_notes(

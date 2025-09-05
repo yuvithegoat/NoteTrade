@@ -6,37 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 from typing import List, Optional
 import os
-<<<<<<< HEAD
-from app.db import create_db_and_tables, get_session
-from passlib.context import CryptContext
-from app.models import Note, Transaction, User
-from jose import jwt 
-from datetime import datetime, timedelta
-
-app = FastAPI(title="NoteTrade API")
-
-# Signup/Login
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def get_password_hash(password):
-    return pwd_context.hash(password) 
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
-
-def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=1)):
-    SECRET_KEY = "764b967bd547q2vc64y970nv85chycgbxa8rt3yvn9q87nq12waf0535trmkpqazcvvrdi"  # Change this to a random, secret string!
-    ALGORITHM = "HS256"
-    to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-
-# Call this once at startup to create tables (if they don't exist)
-create_db_and_tables()
-
-=======
 from app.db import create_db_and_tables
 
 app = FastAPI()
@@ -50,7 +19,6 @@ from app.models import Note, Transaction
 from app.db import create_db_and_tables, get_session
 
 app = FastAPI(title="NoteTrade API")
->>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
 
 # CORS middleware if needed
 origins = [
@@ -105,7 +73,7 @@ def about(request: Request):
 def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
 @app.get("/privacy", response_class=HTMLResponse)
-<<<<<<< HEAD
+
 def privacy(request: Request):
     return templates.TemplateResponse("privacy.html", {"request": request})
 @app.get("/terms", response_class=HTMLResponse)
@@ -121,13 +89,13 @@ def login_page(request: Request):
 def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
-=======
+
 def contact(request: Request):
     return templates.TemplateResponse("privacy.html", {"request": request})
 @app.get("/terms", response_class=HTMLResponse)
 def contact(request: Request):
     return templates.TemplateResponse("terms.html", {"request": request})
->>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
+@app.get("/signup", response_class=HTMLResponse)
 # API routes
 @app.get("/api/notes", response_model=List[Note])
 def read_notes(
@@ -159,11 +127,7 @@ async def upload_note(
     file: UploadFile = File(...),
     session: Session = Depends(get_session),
 ):
-<<<<<<< HEAD
     if not file.filename.lower().endswith(".pdf"):
-=======
-    if file.filename.lower().endswith(".pdf"):
->>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
         raise HTTPException(status_code=400, detail="Only PDF files allowed.")
 
     file_location = os.path.join(UPLOAD_DIR, file.filename)
@@ -194,9 +158,10 @@ def get_uploaded_file(filename: str):
     file_path = os.path.join(UPLOAD_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
-<<<<<<< HEAD
     return FileResponse(path=file_path, media_type="application/pdf", filename=filename)
-    
+from fastapi.staticfiles import StaticFiles
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")    
 @app.post("/api/signup")
 def signup(
     username: str = Form(...),
@@ -229,6 +194,27 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid credentials")
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
-=======
-    return FileResponse(path=file_path, media_type="application/pdf", filename=filename)
->>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
+from fastapi.responses import StreamingResponse
+from PyPDF2 import PdfReader, PdfWriter
+import io
+
+@app.get("/preview")
+def preview_pdf(file: str):
+    # Only allow files inside the uploads directory for security
+    if not file.startswith("uploads/"):
+        raise HTTPException(status_code=400, detail="Invalid file path")
+    file_path = os.path.join(os.getcwd(), file)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    # Read the PDF and extract first 10% of pages (at least 1)
+    with open(file_path, "rb") as f:
+        reader = PdfReader(f)
+        total_pages = len(reader.pages)
+        preview_pages = max(1, int(total_pages * 0.1))
+        writer = PdfWriter()
+        for i in range(preview_pages):
+            writer.add_page(reader.pages[i])
+        output = io.BytesIO()
+        writer.write(output)
+        output.seek(0)
+        return StreamingResponse(output, media_type="application/pdf")

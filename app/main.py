@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session, select
 from typing import List, Optional
 import os
+<<<<<<< HEAD
 from app.db import create_db_and_tables, get_session
 from passlib.context import CryptContext
 from app.models import Note, Transaction, User
@@ -35,6 +36,21 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(hours=1
 # Call this once at startup to create tables (if they don't exist)
 create_db_and_tables()
 
+=======
+from app.db import create_db_and_tables
+
+app = FastAPI()
+    
+# Call this once at startup to create tables (if they don't exist)
+create_db_and_tables()
+
+# ... your other app routes, event handlers, etc.
+
+from app.models import Note, Transaction
+from app.db import create_db_and_tables, get_session
+
+app = FastAPI(title="NoteTrade API")
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
 
 # CORS middleware if needed
 origins = [
@@ -89,6 +105,7 @@ def about(request: Request):
 def contact(request: Request):
     return templates.TemplateResponse("contact.html", {"request": request})
 @app.get("/privacy", response_class=HTMLResponse)
+<<<<<<< HEAD
 def privacy(request: Request):
     return templates.TemplateResponse("privacy.html", {"request": request})
 @app.get("/terms", response_class=HTMLResponse)
@@ -104,6 +121,13 @@ def login_page(request: Request):
 def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+=======
+def contact(request: Request):
+    return templates.TemplateResponse("privacy.html", {"request": request})
+@app.get("/terms", response_class=HTMLResponse)
+def contact(request: Request):
+    return templates.TemplateResponse("terms.html", {"request": request})
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
 # API routes
 @app.get("/api/notes", response_model=List[Note])
 def read_notes(
@@ -135,7 +159,11 @@ async def upload_note(
     file: UploadFile = File(...),
     session: Session = Depends(get_session),
 ):
+<<<<<<< HEAD
     if not file.filename.lower().endswith(".pdf"):
+=======
+    if file.filename.lower().endswith(".pdf"):
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
         raise HTTPException(status_code=400, detail="Only PDF files allowed.")
 
     file_location = os.path.join(UPLOAD_DIR, file.filename)
@@ -166,6 +194,7 @@ def get_uploaded_file(filename: str):
     file_path = os.path.join(UPLOAD_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
+<<<<<<< HEAD
     return FileResponse(path=file_path, media_type="application/pdf", filename=filename)
     
 @app.post("/api/signup")
@@ -200,3 +229,6 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid credentials")
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
+=======
+    return FileResponse(path=file_path, media_type="application/pdf", filename=filename)
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1

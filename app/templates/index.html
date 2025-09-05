@@ -303,6 +303,7 @@
     <a href="/upload">Upload</a>
     <a href="/about">About</a>
     <a href="/contact">Contact</a>
+<<<<<<< HEAD
     <a href="/signup" id="signupLink">Sign Up</a>
     <a href="/login" id="loginLink">Login</a>
     <a href="#" id="logoutLink" style="display:none;">Logout</a>
@@ -326,6 +327,11 @@
     };
 </script>
 
+=======
+  </div>
+</nav>
+
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
 <main>
   <h2>Browse All Notes</h2>
 
@@ -480,12 +486,37 @@
   const exportCsvBtn = document.getElementById('exportCsvBtn');
 
   // Fetch notes from "backend API" (simulate with Promise)
+<<<<<<< HEAD
 // ...existing code...
 function fetchNotesFromApi() {
   return fetch('/api/notes?limit=1000')
     .then(res => res.json());
 }
 // ...existing code...
+=======
+  function fetchNotesFromApi() {
+    // Simulated data with dummy URLs (should be replaced with real API call)
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const subjects = ['Biology', 'Chemistry', 'Math', 'Physics', 'Economics', 'English', 'History', 'Computer Science'];
+        const categories = ['Study Guide', 'Revision Notes', 'Exam Papers', 'Cheat Sheet', 'Worksheets', 'Flashcards'];
+        let notes = [];
+        for (let i = 1; i <= 100; i++) {
+          notes.push({
+            id: i,
+            title: `Note ${i} - ${subjects[i % subjects.length]} - ${categories[i % categories.length]}`,
+            description: `This is a detailed description of Note ${i}, a useful resource for ${subjects[i % subjects.length]} students.`,
+            subject: subjects[i % subjects.length],
+            category: categories[i % categories.length],
+            price: (Math.random() * 10).toFixed(2),
+            pdfUrl: `https://example.com/notes/note${i}.pdf`
+          });
+        }
+        resolve(notes);
+      }, 700);
+    });
+  }
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
 
   function renderNotes(notes) {
     for (const note of notes) {
@@ -601,6 +632,7 @@ function fetchNotesFromApi() {
   searchInput.addEventListener('keyup', e => { if(e.key === 'Enter') applyFilters(); });
   exportCsvBtn.addEventListener('click', exportToCsv);
 
+<<<<<<< HEAD
   // ...existing code...
 // ...existing code...
 fetchNotesFromApi().then(notes => {
@@ -639,6 +671,13 @@ fetchNotesFromApi().then(notes => {
     notesContainer.innerHTML = '<p style="font-size:1.2rem; color:#dc2626;">Error loading notes. Please try again later.</p>';
     loadMoreBtn.style.display = 'none';
     paginationInfo.textContent = '';
+=======
+  // Initialization
+  fetchNotesFromApi().then(notes => {
+    allNotes = notes;
+    filteredNotes = notes;
+    loadMore();
+>>>>>>> ea9a8b946a124ea57181e843c770834e13efafd1
   });
 </script>
 </body>
